@@ -10,7 +10,10 @@ setup: | check-ruby nokogiri check-jq
 data:
 	@mkdir -p data
 
-data/all.json: compile.rb $(wildcard lib/*.rb) | data check-ruby nokogiri
+cldr:
+	@git submodule update --init cldr
+
+data/all.json: compile.rb $(wildcard lib/*.rb) | cldr data check-ruby nokogiri
 	@ruby compile.rb > data/all.json
 
 data/%.txt: views/%.txt.jq data/all.json | data check-jq
