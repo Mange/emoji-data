@@ -1,7 +1,15 @@
-.PHONY: setup check-ruby check-jq nokogiri
-.DEFAULT: setup
+.PHONY: setup check-ruby check-jq nokogiri all
+.DEFAULT: all
+
+all: data/all.json
 
 setup: | check-ruby nokogiri check-jq
+
+data:
+	@mkdir -p data
+
+data/all.json: compile.rb $(wildcard lib/*.rb) | data check-ruby nokogiri
+	@ruby compile.rb > data/all.json
 
 check-ruby:
 	@hash ruby >/dev/null || (echo "You need to install Ruby!"; false)
