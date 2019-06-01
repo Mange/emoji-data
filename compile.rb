@@ -26,7 +26,7 @@ Dir["cldr/common/annotations/*.xml"].each do |filename|
     end
 
     emoji.keywords[language] ||= []
-    emoji.keywords[language] += keywords
+    emoji.keywords[language] |= keywords
   end
   $stderr.print "."
 end
