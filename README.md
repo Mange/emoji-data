@@ -157,13 +157,13 @@ Raw data of all emojis used to generate all other data files. Basic structure is
 {
   "categories": [
     {
-      name: "Category name",
-      subcategories: [
+      "name": "Category name",
+      "subcategories": [
         {
-          name: "Subcategory name",
-          emojis: [
+          "name": "Subcategory name",
+          "emojis": [
             {
-              characters: "…",
+              "characters": "…",
               "keywords": {
                 "lang1": ["keyword1", "keyword2"],
                 "lang2": ["keyword1", "keyword2"],
