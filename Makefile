@@ -1,7 +1,9 @@
 .PHONY: setup check-ruby check-jq nokogiri all
 .DEFAULT: all
 
-all: data/all.json
+DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq))
+
+all: $(DATA_FILES)
 
 setup: | check-ruby nokogiri check-jq
 
@@ -10,6 +12,12 @@ data:
 
 data/all.json: compile.rb $(wildcard lib/*.rb) | data check-ruby nokogiri
 	@ruby compile.rb > data/all.json
+
+data/%.txt: views/%.txt.jq data/all.json | data check-jq
+	@jq -r -f "$<" < data/all.json > "$@"
+
+data/%.json: views/%.json.jq data/all.json | data check-jq
+	@jq -f "$<" < data/all.json > "$@"
 
 check-ruby:
 	@hash ruby >/dev/null || (echo "You need to install Ruby!"; false)
