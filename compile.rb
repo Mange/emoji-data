@@ -12,19 +12,43 @@ labels_file = "cldr/common/properties/labels.txt"
 emojis = LabelFile.new(labels_file).read_emojis
 
 # Load keywords for each locale
+def load_annotations(filename, emojis)
+  annotation_file = AnnotationFile.new(filename)
+  language = annotation_file.language
+  annotation_file.each_annotation do |characters, keywords|
+    emoji = emojis[characters] || add_new_emoji(characters, emojis)
+
+    emoji.keywords[language] ||= []
+    emoji.keywords[language] |= keywords
+  end
+end
+
+def add_new_emoji(characters, emojis)
+  # Try to find emoji using the same base character to get category and
+  # subcategory.
+  # For example, if this is Fairy + ZWJ + Male (for "Male Fairy"), then pick
+  # the same category and subcategory as "Fairy" is in.
+  base_emoji = emojis[Emoji.root_character(characters)]
+  emoji =
+    if base_emoji
+      Emoji.new(
+        characters: characters,
+        category: base_emoji.category,
+        subcategory: base_emoji.subcategory,
+      )
+    else
+      Emoji.anonymous(characters)
+    end
+
+  emojis[characters] = emoji
+end
+
 $stderr.print "Loading annotations"
 Dir[
   "cldr/common/annotations/*.xml",
   "cldr/common/annotationsDerived/*.xml",
 ].each do |filename|
-  annotation_file = AnnotationFile.new(filename)
-  language = annotation_file.language
-  annotation_file.each_annotation do |characters, keywords|
-    emoji = (emojis[characters] ||= Emoji.anonymous(characters))
-
-    emoji.keywords[language] ||= []
-    emoji.keywords[language] |= keywords
-  end
+  load_annotations(filename, emojis)
   $stderr.print "."
 end
 warn " Done!"
