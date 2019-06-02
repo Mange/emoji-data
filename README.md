@@ -149,6 +149,21 @@ Flags   subdivision-flag
 No category
 ```
 
+### `subcategories_count.txt`
+
+Like `subcategories.txt`, but every line has an additional column with the
+total amount of emojis residing under that category/subcategory pair.
+
+#### Sample
+
+```text
+Symbols geometric	22
+Flags   flag	7
+Flags   country-flag	258
+Flags   subdivision-flag	3
+No category		1563
+```
+
 ### `all.json`
 
 Raw data of all emojis used to generate all other data files. Basic structure is this:
