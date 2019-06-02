@@ -19,8 +19,8 @@ Dir[
 ].each do |filename|
   annotation_file = AnnotationFile.new(filename)
   language = annotation_file.language
-  annotation_file.each_annotation do |character, keywords|
-    emoji = (emojis[character] ||= Emoji.anonymous(character))
+  annotation_file.each_annotation do |characters, keywords|
+    emoji = (emojis[characters] ||= Emoji.anonymous(characters))
 
     emoji.keywords[language] ||= []
     emoji.keywords[language] |= keywords
@@ -51,7 +51,7 @@ end
 def format_emojis(emojis)
   emojis.map do |emoji|
     {
-      characters: emoji.character,
+      characters: emoji.characters,
       keywords: emoji.keywords,
     }
   end

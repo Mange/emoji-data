@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 class Emoji
-  attr_reader :character, :category, :subcategory, :keywords
+  attr_reader :characters, :category, :subcategory, :keywords
 
-  def self.anonymous(character)
+  def self.anonymous(characters)
     new(
-      character: character,
+      characters: characters,
       category: nil,
       subcategory: nil,
     )
   end
 
-  def initialize(character:, category:, subcategory:)
-    @character = character
+  def initialize(characters:, category:, subcategory:)
+    @characters = characters
     @category = category || "No category"
     @subcategory = subcategory
     @keywords = {}

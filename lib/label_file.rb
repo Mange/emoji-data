@@ -24,16 +24,16 @@ class LabelFile
 
   def build_emojis_from_line(line)
     character_spec, label, second_level = line.split(";").map(&:strip)
-    characters = CharacterSpec.parse(character_spec)
+    spec = CharacterSpec.parse(character_spec)
 
-    characters.each_with_object({}) do |character, accumulator|
-      add_emoji(accumulator, character, label, second_level)
+    spec.each_with_object({}) do |characters, accumulator|
+      add_emoji(accumulator, characters, label, second_level)
     end
   end
 
-  def add_emoji(accumulator, character, label, second_level)
-    accumulator[character] = Emoji.new(
-      character: character,
+  def add_emoji(accumulator, characters, label, second_level)
+    accumulator[characters] = Emoji.new(
+      characters: characters,
       category: label,
       subcategory: second_level,
     )

@@ -13,12 +13,12 @@ class AnnotationFile
 
   def each_annotation
     each_annotation_element do |element|
-      character = element["cp"]
+      characters = element["cp"]
 
       keywords = element.text.split(" | ")
       keywords.delete_if { |word| word == "↑↑↑" }
 
-      yield character, keywords unless keywords.empty?
+      yield characters, keywords unless keywords.empty?
     end
   end
 
