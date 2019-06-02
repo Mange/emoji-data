@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class Emoji
-  attr_reader :character, :category, :subcategory, :keywords, :normalized
-
-  def self.normalize(character)
-    character.gsub(/[\ufe0e\ufe0f]/, "")
-  end
+  attr_reader :character, :category, :subcategory, :keywords
 
   def self.anonymous(character)
     new(
@@ -20,6 +16,5 @@ class Emoji
     @category = category || "No category"
     @subcategory = subcategory
     @keywords = {}
-    @normalized = Emoji.normalize(character)
   end
 end

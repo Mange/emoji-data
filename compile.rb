@@ -13,17 +13,14 @@ emojis = LabelFile.new(labels_file).read_emojis
 
 # Load keywords for each locale
 $stderr.print "Loading annotations"
-Dir["cldr/common/annotations/*.xml"].each do |filename|
+Dir[
+  "cldr/common/annotations/*.xml",
+  "cldr/common/annotationsDerived/*.xml",
+].each do |filename|
   annotation_file = AnnotationFile.new(filename)
   language = annotation_file.language
   annotation_file.each_annotation do |character, keywords|
-    normalized = Emoji.normalize(character)
-    emoji = emojis[normalized]
-
-    if emoji.nil?
-      emoji = Emoji.anonymous(character)
-      emojis[emoji.normalized] = emoji
-    end
+    emoji = (emojis[character] ||= Emoji.anonymous(character))
 
     emoji.keywords[language] ||= []
     emoji.keywords[language] |= keywords

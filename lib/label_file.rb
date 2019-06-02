@@ -31,22 +31,11 @@ class LabelFile
     end
   end
 
-  def warn_collision(new, old)
-    warn <<~MESSAGE
-      Warning: Found duplicate normalized: #{new.character} also normalizes to #{old.character}
-    MESSAGE
-  end
-
   def add_emoji(accumulator, character, label, second_level)
-    emoji = Emoji.new(
+    accumulator[character] = Emoji.new(
       character: character,
       category: label,
       subcategory: second_level,
     )
-
-    if accumulator.key?(emoji.normalized)
-      warn_collision(emoji, accumulator[emoji.normalized])
-    end
-    accumulator[emoji.normalized] = emoji
   end
 end
