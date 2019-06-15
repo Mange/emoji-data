@@ -4,17 +4,7 @@ class CharacterSpec
   def self.parse(string)
     raise "Unexpected pattern" unless string[0] == "[" && string[-1] == "]"
 
-    new(string[1, string.size - 2]).characters
-  end
-
-  attr_reader :characters
-
-  def initialize(string)
-    @characters = parse_string(string)
-  end
-
-  private
-  def parse_string(string)
+    string = string[1, string.size - 2]
     state = :normal
     compound_buf = +""
 

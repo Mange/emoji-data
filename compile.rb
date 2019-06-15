@@ -7,57 +7,40 @@ require_relative "lib/emoji"
 require_relative "lib/label_file"
 require_relative "lib/annotation_file"
 
-# Build emoji table
-labels_file = "cldr/common/properties/labels.txt"
-emojis = LabelFile.new(labels_file).read_emojis
-
 # Load keywords for each locale
 def load_annotations(filename, emojis)
   annotation_file = AnnotationFile.new(filename)
   language = annotation_file.language
   annotation_file.each_annotation do |characters, keywords|
-    emoji = emojis[characters] || add_new_emoji(characters, emojis)
+    emoji = emojis[characters]
+    if emoji.nil?
+      emoji = Emoji.new(characters: characters)
+      emojis[characters] = emoji
+    end
 
     emoji.keywords[language] ||= []
     emoji.keywords[language] |= keywords
   end
 end
 
-def add_new_emoji(characters, emojis)
+def add_missing_category(emoji, emojis)
   # Try to find emoji using the same base character to get category and
   # subcategory.
   # For example, if this is Fairy + ZWJ + Male (for "Male Fairy"), then pick
   # the same category and subcategory as "Fairy" is in.
-  base_emoji = emojis[Emoji.root_character(characters)]
-  emoji =
-    if base_emoji
-      Emoji.new(
-        characters: characters,
-        category: base_emoji.category,
-        subcategory: base_emoji.subcategory,
-      )
-    else
-      Emoji.anonymous(characters)
-    end
+  base_emoji = emojis[emoji.root_characters]
 
-  emojis[characters] = emoji
+  if base_emoji && base_emoji != emoji
+    emoji.category ||= base_emoji.category
+    emoji.subcategory ||= base_emoji.subcategory
+  end
 end
-
-$stderr.print "Loading annotations"
-Dir[
-  "cldr/common/annotations/*.xml",
-  "cldr/common/annotationsDerived/*.xml",
-].each do |filename|
-  load_annotations(filename, emojis)
-  $stderr.print "."
-end
-warn " Done!"
 
 # Rework table into Category > Subcategory > Emojis structure
 def format_categories(emojis)
   emojis.group_by(&:category).map do |category_name, group|
     {
-      name: category_name,
+      name: category_name || "No category",
       subcategories: format_subcategories(group),
     }
   end
@@ -80,6 +63,28 @@ def format_emojis(emojis)
     }
   end
 end
+
+# Build emoji table
+labels_file = "cldr/common/properties/labels.txt"
+emojis = LabelFile.new(labels_file).read_emojis
+
+$stderr.print "Loading annotations"
+Dir[
+  "cldr/common/annotations/*.xml",
+  "cldr/common/annotationsDerived/*.xml",
+].each do |filename|
+  load_annotations(filename, emojis)
+  $stderr.print "."
+end
+warn " Done!"
+
+$stderr.print "Trying to determine categories… "
+emojis.each_value do |emoji|
+  if emoji.subcategory.nil? || emoji.category.nil?
+    add_missing_category(emoji, emojis)
+  end
+end
+warn " Done!"
 
 document = {
   categories: format_categories(emojis.values),

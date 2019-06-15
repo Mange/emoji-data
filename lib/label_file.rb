@@ -34,8 +34,16 @@ class LabelFile
   def add_emoji(accumulator, characters, label, second_level)
     accumulator[characters] = Emoji.new(
       characters: characters,
-      category: label,
-      subcategory: second_level,
+      category: presence(label),
+      subcategory: presence(second_level),
     )
+  end
+
+  def presence(string)
+    if string.nil? || string.empty?
+      nil
+    else
+      string
+    end
   end
 end
