@@ -2,9 +2,7 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "lib/character_spec"
 require_relative "lib/emoji"
-require_relative "lib/label_file"
 require_relative "lib/annotation_file"
 require_relative "lib/emoji_test_file"
 
@@ -52,21 +50,13 @@ def format_emojis(emojis)
 end
 
 # Build emoji table
-$stderr.print "Loading CLDR label file…"
-labels_file = "cldr/common/properties/labels.txt"
-emojis = LabelFile.new(labels_file).read_emojis
-warn " Done!"
+emojis = {}
 
 $stderr.print "Loading CLDR emoji-test file…"
 EmojiTestFile.new(
   "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt",
 ).each_emoji do |emoji|
-  existing = emojis[emoji.characters]
-  if existing
-    existing.merge!(emoji)
-  else
-    emojis[emoji.characters] = emoji
-  end
+  emojis[emoji.characters] = emoji
 end
 warn " Done!"
 
