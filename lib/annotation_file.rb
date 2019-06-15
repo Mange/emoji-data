@@ -8,23 +8,29 @@ class AnnotationFile
   end
 
   def language
-    @document.root.at_xpath("./identity/language")["type"]
+    @language ||= @document.root.at_xpath("./identity/language")["type"]
   end
 
   def each_annotation
     each_annotation_element do |element|
-      characters = element["cp"]
+      emoji = Emoji.new(characters: element["cp"])
 
-      keywords = element.text.split(" | ")
-      keywords.delete_if { |word| word == "↑↑↑" }
+      if element["type"] == "tts"
+        emoji.name = element.text.strip
+      else
+        keywords = element.text.split(" | ")
+        keywords.delete_if { |word| word == "↑↑↑" }
 
-      yield characters, keywords unless keywords.empty?
+        emoji.keywords[language] = keywords unless keywords.empty?
+      end
+
+      yield emoji
     end
   end
 
   private
   def each_annotation_element
-    selector = './annotations/annotation[not(@type = "tts")]'
+    selector = "./annotations/annotation"
     @document.root.xpath(selector).each do |element|
       yield element
     end

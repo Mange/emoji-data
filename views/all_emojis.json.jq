@@ -12,9 +12,11 @@
       $sub.emojis | map(
         {
           characters: .characters,
+          name: .name,
           category_name: $cat,
           subcategory_name: $sub.name,
-          en_keywords: (.keywords.en // [])
+          en_keywords: (.keywords.en // []),
+          qualification: .qualification
         }
       )
     )

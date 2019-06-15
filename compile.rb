@@ -6,22 +6,7 @@ require_relative "lib/character_spec"
 require_relative "lib/emoji"
 require_relative "lib/label_file"
 require_relative "lib/annotation_file"
-
-# Load keywords for each locale
-def load_annotations(filename, emojis)
-  annotation_file = AnnotationFile.new(filename)
-  language = annotation_file.language
-  annotation_file.each_annotation do |characters, keywords|
-    emoji = emojis[characters]
-    if emoji.nil?
-      emoji = Emoji.new(characters: characters)
-      emojis[characters] = emoji
-    end
-
-    emoji.keywords[language] ||= []
-    emoji.keywords[language] |= keywords
-  end
-end
+require_relative "lib/emoji_test_file"
 
 def add_missing_category(emoji, emojis)
   # Try to find emoji using the same base character to get category and
@@ -59,26 +44,50 @@ def format_emojis(emojis)
   emojis.map do |emoji|
     {
       characters: emoji.characters,
+      name: emoji.name,
       keywords: emoji.keywords,
+      qualification: emoji.qualification,
     }
   end
 end
 
 # Build emoji table
+$stderr.print "Loading CLDR label file…"
 labels_file = "cldr/common/properties/labels.txt"
 emojis = LabelFile.new(labels_file).read_emojis
+warn " Done!"
+
+$stderr.print "Loading CLDR emoji-test file…"
+EmojiTestFile.new(
+  "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt",
+).each_emoji do |emoji|
+  existing = emojis[emoji.characters]
+  if existing
+    existing.merge!(emoji)
+  else
+    emojis[emoji.characters] = emoji
+  end
+end
+warn " Done!"
 
 $stderr.print "Loading annotations"
 Dir[
   "cldr/common/annotations/*.xml",
   "cldr/common/annotationsDerived/*.xml",
 ].each do |filename|
-  load_annotations(filename, emojis)
+  AnnotationFile.new(filename).each_annotation do |emoji|
+    existing = emojis[emoji.characters]
+    if existing
+      existing.merge!(emoji)
+    else
+      emojis[emoji.characters] = emoji
+    end
+  end
   $stderr.print "."
 end
 warn " Done!"
 
-$stderr.print "Trying to determine categories… "
+$stderr.print "Trying to determine missing categories… "
 emojis.each_value do |emoji|
   if emoji.subcategory.nil? || emoji.category.nil?
     add_missing_category(emoji, emojis)

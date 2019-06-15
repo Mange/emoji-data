@@ -54,10 +54,13 @@ Here are the current views, and an example of how they look like.
 An JSON array of all emojis as objects with the following keys:
 
 * `characters` - **String**. The Unicode characters that make up the emoji.
+* `name` - **String**. The name of the emoji.
 * `category_name` - **String**. The name of the category the emoji resides in.
 * `subcategory_name` - **String | `null`**. The name of the subcategory the
   emoji resides in.
 * `en_keywords` - **Array<String>**. List of English keywords for the emoji.
+* `qualification` - **String**. Either "fully-qualified", "unqualified", or
+  undetermined.
 
 #### Sample
 
@@ -65,6 +68,7 @@ An JSON array of all emojis as objects with the following keys:
 [
   {
     "characters": "😂",
+    "name": "face with tears of joy",
     "category_name": "Smileys & People",
     "subcategory_name": "face-positive",
     "en_keywords": [
@@ -73,10 +77,12 @@ An JSON array of all emojis as objects with the following keys:
       "joy",
       "laugh",
       "tear"
-    ]
+    ],
+    "qualification": "fully-qualified"
   },
   {
     "characters": "😃",
+    "name": "grinning face with big eyes",
     "category_name": "Smileys & People",
     "subcategory_name": "face-positive",
     "en_keywords": [
@@ -85,7 +91,8 @@ An JSON array of all emojis as objects with the following keys:
       "mouth",
       "open",
       "smile"
-    ]
+    ],
+    "qualification": "fully-qualified"
   }
 ]
 ```
@@ -101,14 +108,15 @@ Columns are, in order:
 * `category_name` - The name of the category the emoji resides in.
 * `subcategory_name` - The name of the subcategory the emoji resides in. Can be
   empty.
+* `name` - The name of the emoji.
 * `en_keywords` - List of English keywords for the emoji, joined with pipes
   (`|`).
 
 #### Sample
 
 ```text
-😁    Smileys & People        face-positive   beaming face with smiling eyes | eye | face | grin | smile
-😂    Smileys & People        face-positive   face | face with tears of joy | joy | laugh | tear
+😁    Smileys & People        face-positive   beaming face with smiling eyes	beaming face with smiling eyes | eye | face | grin | smile
+😂    Smileys & People        face-positive   face with tears of joy	face | face with tears of joy | joy | laugh | tear
 ```
 
 ### `categories.txt`
@@ -126,7 +134,8 @@ Activities
 Objects
 Symbols
 Flags
-No category
+Smileys & Emotion
+People & Body
 ```
 
 ### `subcategories.txt`
@@ -137,16 +146,22 @@ separated by a tab character.
 #### Sample
 
 ```text
-Activities      event
-Activities      award-medal
-Activities      sport
-Activities      game
-Activities      arts & crafts
+Symbols keycap
+Symbols alphanum
 Symbols geometric
+Symbols gender
 Flags   flag
 Flags   country-flag
 Flags   subdivision-flag
-No category
+Smileys & Emotion       face-affection
+Smileys & Emotion       face-hat
+Smileys & Emotion       face-concerned
+Smileys & Emotion       face-negative
+Smileys & Emotion       emotion
+People & Body   hand-fingers-open
+People & Body   hand-fingers-partial
+People & Body   hand-single-finger
+People & Body   hand-fingers-closed
 ```
 
 ### `subcategories_count.txt`
@@ -157,11 +172,13 @@ total amount of emojis residing under that category/subcategory pair.
 #### Sample
 
 ```text
-Symbols geometric	22
-Flags   flag	7
-Flags   country-flag	258
-Flags   subdivision-flag	3
-No category		1563
+People & Body person-role 488
+People & Body person-fantasy  208
+People & Body person-activity 294
+People & Body person-sport  346
+People & Body person-resting  37
+People & Body family  77
+People & Body person-symbol 2
 ```
 
 ### `all.json`
@@ -179,10 +196,12 @@ Raw data of all emojis used to generate all other data files. Basic structure is
           "emojis": [
             {
               "characters": "…",
+              "name": "name of the emoji",
               "keywords": {
                 "lang1": ["keyword1", "keyword2"],
                 "lang2": ["keyword1", "keyword2"],
-              }
+              },
+              "qualification": "fully-qualified",
             }
           ]
         }
@@ -198,26 +217,6 @@ You can implement custom views using `jq`. Add a file in `views` and name it
 with either `.txt.jq` or `.json.jq` extensions depending on what you want.
 `make` will pick up these files automatically and run it to build a file under
 `data/`.
-
-## Problems
-
-### Uncategorized emojis
-
-Some of the newer symbols lack category and subcategory. They have assigned
-categories in the [CLDR][cldr] test files, but are not listed in the
-`labels.txt` list that gives all emojis a category and subcategory, and can
-therefore not be placed in a category.
-
-This could be solved by also parsing the test files to get emoji candidates, or
-perhaps the Unicode Consortium will update the `labels.txt` file soon.
-
-Right now these emojis get the category "Uncategorized" and no subcategory.
-
-### Missing combinations of emojis
-
-Some emoji combinations (for example, people + skin color, or keypad numbers)
-are not yet loaded. There are so many combinations, so it's unclear if they
-should be in the dataset or left as an exercise for the user.
 
 ## Copyright
 

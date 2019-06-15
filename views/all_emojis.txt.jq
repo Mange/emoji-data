@@ -10,8 +10,8 @@
     # Build an array of all emojis in this subcategory
     . + (
       $sub.emojis | map(
-        # emoji    category     subcategory    keyword | keyword | keyword
-        "\(.characters)\t\($cat)\t\($sub.name // "")\t\(.keywords.en // [] | join(" | "))"
+        # emoji    category     subcategory    name     keyword | keyword | keyword
+        "\(.characters)\t\($cat)\t\($sub.name // "")\t\(.name // "")\t\(.keywords.en // [] | join(" | "))"
       )
     )
   ) |
