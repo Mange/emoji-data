@@ -2,6 +2,9 @@
 .DEFAULT: all
 
 DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq)) data/all.json
+INPUT_FILES := $(wildcard cldr/common/annotations/*.xml) \
+	$(wildcard cldr/common/annotationsDerived/*.xml) \
+	cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt
 
 all: $(DATA_FILES)
 
@@ -15,7 +18,7 @@ data:
 cldr:
 	@git submodule update --init cldr
 
-data/all.json: compile.rb $(wildcard lib/*.rb) | cldr data check-ruby nokogiri
+data/all.json: compile.rb $(wildcard lib/*.rb) $(INPUT_FILES) | cldr data check-ruby nokogiri
 	@ruby compile.rb > "$@"
 
 data/%.txt: views/%.txt.jq data/all.json | data check-jq
