@@ -1,4 +1,4 @@
-.PHONY: setup check-ruby check-jq nokogiri all dist cldr
+.PHONY: setup check-ruby check-jq nokogiri all dist cldr clean
 .DEFAULT: all
 
 DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq)) data/all.json
@@ -7,6 +7,9 @@ INPUT_FILES := $(wildcard cldr/common/annotations/*.xml) \
 	cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt
 
 all: cldr $(DATA_FILES)
+
+clean:
+	rm -f $(DATA_FILES)
 
 setup: | check-ruby nokogiri check-jq
 
