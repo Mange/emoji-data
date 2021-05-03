@@ -54,7 +54,7 @@ emojis = {}
 
 $stderr.print "Loading CLDR emoji-test file…"
 EmojiTestFile.new(
-  "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt",
+  "cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt",
 ).each_emoji do |emoji|
   emojis[emoji.characters] = emoji
 end
