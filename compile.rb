@@ -62,6 +62,8 @@ warn " Done!"
 
 $stderr.print "Loading annotations"
 Dir[
+  "cldr/common/annotations/en.xml",
+  "cldr/common/annotationsDerived/en.xml",
   "cldr/common/annotations/*.xml",
   "cldr/common/annotationsDerived/*.xml",
 ].each do |filename|
