@@ -9,14 +9,15 @@ class Emoji
     name: nil,
     category: nil,
     subcategory: nil,
-    qualification: nil
+    qualification: nil,
+    keywords: {}
   )
     @characters = characters
     @name = name
     @category = category
     @subcategory = subcategory
     @qualification = qualification
-    @keywords = {}
+    @keywords = keywords
   end
 
   def merge!(other)
