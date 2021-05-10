@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.1)
+    diff-lcs (1.4.4)
     mini_portile2 (2.5.1)
     nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
@@ -15,6 +16,19 @@ GEM
     rainbow (3.0.0)
     regexp_parser (1.8.2)
     rexml (3.2.3)
+    rspec (3.10.0)
+      rspec-core (~> 3.10.0)
+      rspec-expectations (~> 3.10.0)
+      rspec-mocks (~> 3.10.0)
+    rspec-core (3.10.1)
+      rspec-support (~> 3.10.0)
+    rspec-expectations (3.10.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-mocks (3.10.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.10.0)
+    rspec-support (3.10.2)
     rubocop (1.4.2)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
@@ -41,7 +55,8 @@ PLATFORMS
 
 DEPENDENCIES
   nokogiri (~> 1.11)
+  rspec (~> 3.10)
   standard (~> 0.10)
 
 BUNDLED WITH
-   2.2.6
+   2.2.17

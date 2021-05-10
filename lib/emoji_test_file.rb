@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "emoji"
+
 class EmojiTestFile
   def initialize(filename)
     @filename = filename

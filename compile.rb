@@ -2,9 +2,11 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "lib/emoji"
-require_relative "lib/annotation_file"
-require_relative "lib/emoji_test_file"
+
+$LOAD_PATH << File.expand_path("lib", __dir__)
+require "emoji"
+require "annotation_file"
+require "emoji_test_file"
 
 def add_missing_category(emoji, emojis)
   # Try to find emoji using the same base character to get category and
