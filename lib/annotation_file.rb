@@ -18,11 +18,11 @@ class AnnotationFile
     each_annotation_element do |element|
       emoji = Emoji.new(characters: element["cp"])
 
-      if element["type"] == "tts"
+      if element["type"] == "tts" && language == "en"
         emoji.name = element.text.strip
       else
         keywords = element.text.split(" | ")
-        keywords.delete_if { |word| word == "↑↑↑" }
+        keywords.reject! { |word| word == "↑↑↑" }
 
         emoji.keywords[language] = keywords unless keywords.empty?
       end
