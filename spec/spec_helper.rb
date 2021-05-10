@@ -2,18 +2,6 @@
 
 require "tempfile"
 
-module TempFileHelpers
-  def with_example_file(content)
-    file = Tempfile.new("fixture")
-    file.write(content)
-    file.rewind
-    yield file.path
-  ensure
-    file.close
-    file.unlink
-  end
-end
-
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -37,4 +25,31 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
+end
+
+module TempFileHelpers
+  def with_example_file(content, basename = "fixture")
+    file = Tempfile.new(basename)
+    file.write(content)
+    file.close
+    yield file.path
+  ensure
+    file.unlink
+  end
+
+  def with_example_files(files)
+    tempfiles = {}
+
+    files.each_pair do |basename, contents|
+      tempfile = Tempfile.new(basename)
+      tempfiles[basename] = tempfile
+
+      tempfile.write(contents)
+      tempfile.close
+    end
+
+    yield tempfiles.transform_values(&:path)
+  ensure
+    tempfiles.each_value(&:unlink)
+  end
 end

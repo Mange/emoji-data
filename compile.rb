@@ -4,22 +4,7 @@
 require "json"
 
 $LOAD_PATH << File.expand_path("lib", __dir__)
-require "emoji"
-require "annotation_file"
-require "emoji_test_file"
-
-def add_missing_category(emoji, emojis)
-  # Try to find emoji using the same base character to get category and
-  # subcategory.
-  # For example, if this is Fairy + ZWJ + Male (for "Male Fairy"), then pick
-  # the same category and subcategory as "Fairy" is in.
-  base_emoji = emojis[emoji.root_characters]
-
-  if base_emoji && base_emoji != emoji
-    emoji.category ||= base_emoji.category
-    emoji.subcategory ||= base_emoji.subcategory
-  end
-end
+require "compiler"
 
 # Rework table into Category > Subcategory > Emojis structure
 def format_categories(emojis)
@@ -51,15 +36,12 @@ def format_emojis(emojis)
   end
 end
 
-# Build emoji table
-emojis = {}
+compiler = Compiler.new
 
 $stderr.print "Loading CLDR emoji-test file…"
-EmojiTestFile.new(
+compiler.add_test_file(
   "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
-).each_emoji do |emoji|
-  emojis[emoji.characters] = emoji
-end
+)
 warn " Done!"
 
 $stderr.print "Loading annotations"
@@ -67,27 +49,18 @@ Dir[
   "cldr/common/annotations/*.xml",
   "cldr/common/annotationsDerived/*.xml",
 ].each do |filename|
-  AnnotationFile.new(filename).each_annotation do |emoji|
-    existing = emojis[emoji.characters]
-    if existing
-      existing.merge!(emoji)
-    else
-      emojis[emoji.characters] = emoji
-    end
-  end
+  compiler.add_annotation_file(
+    filename
+  )
   $stderr.print "."
 end
 warn " Done!"
 
 $stderr.print "Trying to determine missing categories… "
-emojis.each_value do |emoji|
-  if emoji.subcategory.nil? || emoji.category.nil?
-    add_missing_category(emoji, emojis)
-  end
-end
+compiler.guess_missing_categories
 warn " Done!"
 
 document = {
-  categories: format_categories(emojis.values)
+  categories: format_categories(compiler.emojis.values)
 }
 puts JSON.pretty_generate(document)
