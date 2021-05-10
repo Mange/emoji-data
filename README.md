@@ -34,8 +34,8 @@ provided via GitHub for those that only want to download the finished product.
 In order to build the data files, you'll need:
 
 1. Ruby (2.5 or later).
-2. `jq` command-line JSON processor.
-3. The `nokogiri` Ruby gem, which is installed automatically when needed.
+2. `bundler` (Ruby gem manager) installed.
+3. `jq` command-line JSON processor.
 
 You can check your dependencies by running `make setup`. It will also install
 the Ruby gems that are missing.
