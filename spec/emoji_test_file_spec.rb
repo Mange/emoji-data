@@ -3,6 +3,8 @@
 require "emoji_test_file"
 
 RSpec.describe EmojiTestFile do
+  include TempFileHelpers
+
   it "parses an emoji test file" do
     with_example_file(
       <<~TEXT
@@ -45,15 +47,5 @@ RSpec.describe EmojiTestFile do
         qualification: "unqualified"
       )
     end
-  end
-
-  def with_example_file(content)
-    file = Tempfile.new("fixture")
-    file.write(content)
-    file.rewind
-    yield file.path
-  ensure
-    file.close
-    file.unlink
   end
 end

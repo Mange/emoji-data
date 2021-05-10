@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
+require "emoji"
 
 class AnnotationFile
   def initialize(filename)
@@ -12,6 +13,8 @@ class AnnotationFile
   end
 
   def each_annotation
+    return to_enum(:each_annotation) unless block_given?
+
     each_annotation_element do |element|
       emoji = Emoji.new(characters: element["cp"])
 
