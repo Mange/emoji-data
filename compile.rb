@@ -24,7 +24,7 @@ def format_categories(emojis)
   emojis.group_by(&:category).map do |category_name, group|
     {
       name: category_name || "No category",
-      subcategories: format_subcategories(group),
+      subcategories: format_subcategories(group)
     }
   end
 end
@@ -33,7 +33,7 @@ def format_subcategories(emojis)
   emojis.group_by(&:subcategory).map do |subcategory_name, group|
     {
       name: subcategory_name,
-      emojis: format_emojis(group),
+      emojis: format_emojis(group)
     }
   end
 end
@@ -44,7 +44,7 @@ def format_emojis(emojis)
       characters: emoji.characters,
       name: emoji.name,
       keywords: emoji.keywords,
-      qualification: emoji.qualification,
+      qualification: emoji.qualification
     }
   end
 end
@@ -54,7 +54,7 @@ emojis = {}
 
 $stderr.print "Loading CLDR emoji-test file…"
 EmojiTestFile.new(
-  "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt",
+  "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
 ).each_emoji do |emoji|
   emojis[emoji.characters] = emoji
 end
@@ -86,6 +86,6 @@ end
 warn " Done!"
 
 document = {
-  categories: format_categories(emojis.values),
+  categories: format_categories(emojis.values)
 }
 puts JSON.pretty_generate(document)

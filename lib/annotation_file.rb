@@ -29,6 +29,7 @@ class AnnotationFile
   end
 
   private
+
   def each_annotation_element
     selector = "./annotations/annotation"
     @document.root.xpath(selector).each do |element|

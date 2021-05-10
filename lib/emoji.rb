@@ -34,6 +34,7 @@ class Emoji
   end
 
   private
+
   def merge_keywords(others)
     (keywords.keys | others.keys).each do |locale|
       my_keywords = keywords.fetch(locale, [])

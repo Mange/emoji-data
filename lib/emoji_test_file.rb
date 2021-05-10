@@ -21,7 +21,7 @@ class EmojiTestFile
             category: current_group,
             subcategory: current_subgroup,
             name: matches["name"],
-            qualification: matches["qualification"],
+            qualification: matches["qualification"]
           )
         end
       end
