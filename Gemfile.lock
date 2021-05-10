@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.1)
+    attr_extras (6.2.4)
     diff-lcs (1.4.4)
     mini_portile2 (2.5.1)
     nokogiri (1.11.3)
@@ -9,9 +10,12 @@ GEM
       racc (~> 1.4)
     nokogiri (1.11.3-x86_64-linux)
       racc (~> 1.4)
+    optimist (3.0.1)
     parallel (1.20.0)
     parser (3.0.0.0)
       ast (~> 2.4.1)
+    patience_diff (1.2.0)
+      optimist (~> 3.0)
     racc (1.5.2)
     rainbow (3.0.0)
     regexp_parser (1.8.2)
@@ -47,6 +51,10 @@ GEM
     standard (0.10.2)
       rubocop (= 1.4.2)
       rubocop-performance (= 1.9.1)
+    super_diff (0.7.0)
+      attr_extras (>= 6.2.4)
+      diff-lcs
+      patience_diff
     unicode-display_width (1.7.0)
 
 PLATFORMS
@@ -57,6 +65,7 @@ DEPENDENCIES
   nokogiri (~> 1.11)
   rspec (~> 3.10)
   standard (~> 0.10)
+  super_diff (~> 0.7)
 
 BUNDLED WITH
    2.2.17
