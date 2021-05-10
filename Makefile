@@ -1,4 +1,4 @@
-.PHONY: setup check-ruby check-jq gems all dist cldr clean
+.PHONY: setup check-ruby check-jq gems all dist cldr clean test
 .DEFAULT: all
 
 DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq)) data/all.json
@@ -43,3 +43,7 @@ check-jq:
 gems:
 	@[ $$(gem list --installed bundler) = "true" ] || gem install bundler
 	@bundle check >/dev/null || bundle install --quiet
+
+test: check-ruby gems
+	@echo Checking code style of Ruby files
+	@bundle exec standardrb --no-fix
