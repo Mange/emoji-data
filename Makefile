@@ -1,4 +1,4 @@
-.PHONY: setup check-ruby check-jq nokogiri all dist cldr clean
+.PHONY: setup check-ruby check-jq gems all dist cldr clean test
 .DEFAULT: all
 
 DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq)) data/all.json
@@ -11,7 +11,7 @@ all: cldr $(DATA_FILES)
 clean:
 	rm -f $(DATA_FILES)
 
-setup: | check-ruby nokogiri check-jq
+setup: | check-ruby gems check-jq
 
 dist: data/release.tar.bz2
 
@@ -21,7 +21,7 @@ data:
 cldr:
 	@[ ! -d cldr/.git ] && git submodule update --init cldr
 
-data/all.json: compile.rb $(wildcard lib/*.rb) $(INPUT_FILES) | cldr data check-ruby nokogiri
+data/all.json: compile.rb $(wildcard lib/*.rb) $(INPUT_FILES) | cldr data check-ruby gems
 	@ruby compile.rb > "$@"
 
 data/%.txt: views/%.txt.jq data/all.json | data check-jq
@@ -40,5 +40,10 @@ check-ruby:
 check-jq:
 	@hash jq >/dev/null || (echo "You need to install jq!"; false)
 
-nokogiri:
-	@[ $$(gem list --installed nokogiri) = "true" ] || gem install nokogiri
+gems:
+	@[ $$(gem list --installed bundler) = "true" ] || gem install bundler
+	@bundle check >/dev/null || bundle install --quiet
+
+test: check-ruby gems
+	@echo Checking code style of Ruby files
+	@bundle exec standardrb --no-fix

@@ -2,21 +2,24 @@
 
 class Emoji
   attr_reader :characters
-  attr_accessor :name, :category, :subcategory, :keywords, :qualification
+  attr_accessor :name, :category, :subcategory, :keywords, :tts_descriptions, :qualification
 
   def initialize(
     characters:,
     name: nil,
     category: nil,
     subcategory: nil,
-    qualification: nil
+    qualification: nil,
+    keywords: {},
+    tts_descriptions: {}
   )
     @characters = characters
     @name = name
     @category = category
     @subcategory = subcategory
     @qualification = qualification
-    @keywords = {}
+    @keywords = keywords
+    @tts_descriptions = tts_descriptions
   end
 
   def merge!(other)
@@ -24,6 +27,7 @@ class Emoji
     self.category ||= other.category
     self.subcategory ||= other.subcategory
     self.qualification ||= other.qualification
+    self.tts_descriptions = tts_descriptions.merge(other.tts_descriptions)
     merge_keywords(other.keywords)
     self
   end
@@ -34,6 +38,7 @@ class Emoji
   end
 
   private
+
   def merge_keywords(others)
     (keywords.keys | others.keys).each do |locale|
       my_keywords = keywords.fetch(locale, [])

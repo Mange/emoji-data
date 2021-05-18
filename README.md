@@ -34,8 +34,8 @@ provided via GitHub for those that only want to download the finished product.
 In order to build the data files, you'll need:
 
 1. Ruby (2.5 or later).
-2. `jq` command-line JSON processor.
-3. The `nokogiri` Ruby gem, which is installed automatically when needed.
+2. `bundler` (Ruby gem manager) installed.
+3. `jq` command-line JSON processor.
 
 You can check your dependencies by running `make setup`. It will also install
 the Ruby gems that are missing.
@@ -54,11 +54,13 @@ Here are the current views, and an example of how they look like.
 An JSON array of all emojis as objects with the following keys:
 
 * `characters` - **String**. The Unicode characters that make up the emoji.
-* `name` - **String**. The name of the emoji.
+* `name` - **String**. The name of the emoji, or `en_tts_description` if no
+  name was found.
 * `category_name` - **String**. The name of the category the emoji resides in.
 * `subcategory_name` - **String | `null`**. The name of the subcategory the
   emoji resides in.
 * `en_keywords` - **Array<String>**. List of English keywords for the emoji.
+* `en_tts_description` - **String**. The English TTS description of the emoji.
 * `qualification` - **String**. Either "fully-qualified", "unqualified", or
   undetermined.
 
@@ -73,11 +75,11 @@ An JSON array of all emojis as objects with the following keys:
     "subcategory_name": "face-positive",
     "en_keywords": [
       "face",
-      "face with tears of joy",
       "joy",
       "laugh",
       "tear"
     ],
+    "en_tts_description": "face with tears of joy",
     "qualification": "fully-qualified"
   },
   {
@@ -87,11 +89,11 @@ An JSON array of all emojis as objects with the following keys:
     "subcategory_name": "face-positive",
     "en_keywords": [
       "face",
-      "grinning face with big eyes",
       "mouth",
       "open",
       "smile"
     ],
+    "en_tts_description": "grinning face with big eyes",
     "qualification": "fully-qualified"
   }
 ]
@@ -108,7 +110,7 @@ Columns are, in order:
 * `category_name` - The name of the category the emoji resides in.
 * `subcategory_name` - The name of the subcategory the emoji resides in. Can be
   empty.
-* `name` - The name of the emoji.
+* `name` - The name of the emoji, or TTS description if no name was found.
 * `en_keywords` - List of English keywords for the emoji, joined with pipes
   (`|`).
 
@@ -199,9 +201,10 @@ Raw data of all emojis used to generate all other data files. Basic structure is
               "name": "name of the emoji",
               "keywords": {
                 "lang1": ["keyword1", "keyword2"],
-                "lang2": ["keyword1", "keyword2"],
+                "lang2": ["keyword1", "keyword2"]
               },
-              "qualification": "fully-qualified",
+              "tts_descriptions": {"lang1": "TTS description"},
+              "qualification": "fully-qualified"
             }
           ]
         }
