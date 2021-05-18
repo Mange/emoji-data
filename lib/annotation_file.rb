@@ -20,10 +20,11 @@ class AnnotationFile
     return to_enum(:each_annotation) unless block_given?
 
     each_annotation_element do |element|
+      characters = element["cp"]
       if element["type"] == "tts"
-        read_tts(element) { |emoji| yield emoji }
+        read_tts(characters, element) { |emoji| yield emoji }
       else
-        read_keywords(element) { |emoji| yield emoji }
+        read_keywords(characters, element) { |emoji| yield emoji }
       end
     end
   end
@@ -37,17 +38,17 @@ class AnnotationFile
     end
   end
 
-  def read_tts(element)
+  def read_tts(characters, element)
     description = element.text.strip
     if description != CLDR_DUMMY_VALUE
       yield Emoji.new(
-        characters: element["cp"],
+        characters: characters,
         tts_descriptions: {language => description}
       )
     end
   end
 
-  def read_keywords(element)
+  def read_keywords(characters, element)
     keywords = element
       .text
       .split("|")
@@ -56,7 +57,7 @@ class AnnotationFile
 
     unless keywords.empty?
       yield Emoji.new(
-        characters: element["cp"],
+        characters: characters,
         keywords: {language => keywords}
       )
     end

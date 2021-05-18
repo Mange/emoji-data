@@ -49,7 +49,7 @@ as you want; only outdated files will be rebuilt.
 
 Here are the current views, and an example of how they look like.
 
-### `all_emojis.json`
+#### `all_emojis.json`
 
 An JSON array of all emojis as objects with the following keys:
 
@@ -64,7 +64,7 @@ An JSON array of all emojis as objects with the following keys:
 * `qualification` - **String**. Either "fully-qualified", "unqualified", or
   undetermined.
 
-#### Sample
+##### Sample
 
 ```json
 [
@@ -99,7 +99,7 @@ An JSON array of all emojis as objects with the following keys:
 ]
 ```
 
-### `all_emojis.txt`
+#### `all_emojis.txt`
 
 A tab-separated text file with one emoji on each line. Keywords are joined with
 pipes (`|`) in the last column.
@@ -114,18 +114,18 @@ Columns are, in order:
 * `en_keywords` - List of English keywords for the emoji, joined with pipes
   (`|`).
 
-#### Sample
+##### Sample
 
 ```text
 😁    Smileys & People        face-positive   beaming face with smiling eyes	beaming face with smiling eyes | eye | face | grin | smile
 😂    Smileys & People        face-positive   face with tears of joy	face | face with tears of joy | joy | laugh | tear
 ```
 
-### `categories.txt`
+#### `categories.txt`
 
 A list of all categories in the dataset. One category name per line.
 
-#### Sample
+##### Sample
 
 ```text
 Smileys & People
@@ -140,12 +140,12 @@ Smileys & Emotion
 People & Body
 ```
 
-### `subcategories.txt`
+#### `subcategories.txt`
 
 A list of all category-subcategory pair in the dataset. One pair per line,
 separated by a tab character.
 
-#### Sample
+##### Sample
 
 ```text
 Symbols keycap
@@ -166,12 +166,12 @@ People & Body   hand-single-finger
 People & Body   hand-fingers-closed
 ```
 
-### `subcategories_count.txt`
+#### `subcategories_count.txt`
 
 Like `subcategories.txt`, but every line has an additional column with the
 total amount of emojis residing under that category/subcategory pair.
 
-#### Sample
+##### Sample
 
 ```text
 People & Body person-role 488
@@ -183,7 +183,31 @@ People & Body family  77
 People & Body person-symbol 2
 ```
 
-### `all.json`
+#### `versions_count.txt`
+
+Counts the number of recorded Emojis from each version of the Unicode standard.
+
+You can read up on [what the versions mean][emoji-versions] in the [Unicode
+Technical Standard #51][tr51].
+
+##### Sample
+
+```text
+E0.6  793
+E0.7  254
+E1.0  512
+E2.0  297
+E3.0  157
+E4.0  1030
+E5.0  339
+E11.0 188
+E12.0 266
+E12.1 186
+E13.0 146
+E13.1 422
+```
+
+#### `all.json`
 
 Raw data of all emojis used to generate all other data files. Basic structure is this:
 
@@ -199,6 +223,7 @@ Raw data of all emojis used to generate all other data files. Basic structure is
             {
               "characters": "…",
               "name": "name of the emoji",
+              "version": "E1.0",
               "keywords": {
                 "lang1": ["keyword1", "keyword2"],
                 "lang2": ["keyword1", "keyword2"]
@@ -236,3 +261,5 @@ Code in this repo is Copyright © 2019 Magnus Bergmark.
 
 [cldr]: http://cldr.unicode.org/
 [unicode-license]: http://www.unicode.org/copyright.html
+[tr51]: http://www.unicode.org/reports/tr51/
+[emoji-versions]: http://www.unicode.org/reports/tr51/#EmojiVersions

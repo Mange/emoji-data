@@ -18,6 +18,12 @@ class Compiler
     end
   end
 
+  def merge_emoji(emoji)
+    if (current = emojis[emoji.characters])
+      current.merge!(emoji)
+    end
+  end
+
   def add_test_file(filename)
     EmojiTestFile.new(filename).each_emoji do |emoji|
       add_emoji(emoji)
@@ -26,7 +32,7 @@ class Compiler
 
   def add_annotation_file(filename)
     AnnotationFile.new(filename).each_annotation do |emoji|
-      add_emoji(emoji)
+      merge_emoji(emoji)
     end
   end
 

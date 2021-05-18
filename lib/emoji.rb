@@ -2,10 +2,19 @@
 
 class Emoji
   attr_reader :characters
-  attr_accessor :name, :category, :subcategory, :keywords, :tts_descriptions, :qualification
+  attr_accessor(
+    :name,
+    :version,
+    :category,
+    :subcategory,
+    :keywords,
+    :tts_descriptions,
+    :qualification
+  )
 
   def initialize(
     characters:,
+    version: nil,
     name: nil,
     category: nil,
     subcategory: nil,
@@ -14,6 +23,7 @@ class Emoji
     tts_descriptions: {}
   )
     @characters = characters
+    @version = version
     @name = name
     @category = category
     @subcategory = subcategory
@@ -24,6 +34,7 @@ class Emoji
 
   def merge!(other)
     self.name ||= other.name
+    self.version ||= other.version
     self.category ||= other.category
     self.subcategory ||= other.subcategory
     self.qualification ||= other.qualification

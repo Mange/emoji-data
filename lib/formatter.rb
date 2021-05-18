@@ -41,6 +41,7 @@ class Formatter
     emojis.map do |emoji|
       {
         "characters" => emoji.characters,
+        "version" => emoji.version,
         "name" => emoji.name,
         "keywords" => emoji.keywords,
         "tts_descriptions" => emoji.tts_descriptions,

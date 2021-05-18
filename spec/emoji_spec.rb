@@ -10,6 +10,7 @@ RSpec.describe Emoji do
 
     expect(emoji).to have_attributes(
       characters: "😀",
+      version: nil,
       name: nil,
       category: nil,
       subcategory: nil,
@@ -22,6 +23,7 @@ RSpec.describe Emoji do
   it "accepts optional attributes" do
     emoji = Emoji.new(
       characters: "😀",
+      version: "E0.6",
       name: "grinning face",
       category: "Category",
       subcategory: "Subcategory",
@@ -32,6 +34,7 @@ RSpec.describe Emoji do
 
     expect(emoji).to have_attributes(
       characters: "😀",
+      version: "E0.6",
       name: "grinning face",
       category: "Category",
       subcategory: "Subcategory",
@@ -55,13 +58,14 @@ RSpec.describe Emoji do
 
   describe "#merge!" do
     it "assigns missing fields from the other" do
-      emoji_a = Emoji.new(characters: "A", category: "Letters")
-      emoji_b = Emoji.new(characters: "B", subcategory: "Latin")
+      emoji_a = Emoji.new(characters: "A", category: "Letters", version: "E0.6")
+      emoji_b = Emoji.new(characters: "B", subcategory: "Latin", version: "E1.0")
 
       emoji_a.merge!(emoji_b)
 
       expect(emoji_a).to have_attributes(
         characters: "A",
+        version: "E0.6",
         category: "Letters",
         subcategory: "Latin",
         keywords: {}
@@ -69,6 +73,7 @@ RSpec.describe Emoji do
 
       expect(emoji_b).to have_attributes(
         characters: "B",
+        version: "E1.0",
         category: nil,
         subcategory: "Latin",
         keywords: {}

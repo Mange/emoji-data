@@ -54,19 +54,23 @@ class EmojiTestFile
         category: current_group,
         subcategory: current_subgroup,
         characters: matches["characters"],
+        version: matches["version"],
         name: matches["name"],
         qualification: matches["qualification"]
       )
     end
+  rescue => error
+    raise "Error while parsing Emoji test data: #{error}\nLine: #{line.inspect}"
   end
 
   MATCHER = /
-    # "1F48B     ; fully-qualified     # 💋 kiss mark"
+    # "1F48B     ; fully-qualified     # 💋 E0.6 kiss mark"
     ^
-    [^;]+;\s                  # "1F48B       ; "
+    [^;:]+;\s                 # "1F48B       ; "
     (?<qualification>[^\s]+)  # "fully-qualified"
     \s+\#\s+                  # "  # "
     (?<characters>[^\s]+)\s+  # "💋 "
+    (?<version>[^\s]+)\s+     # "E0.6 "
     (?<name>.*)$              # "kiss mark"
   /x.freeze
 end
