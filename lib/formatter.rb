@@ -43,6 +43,7 @@ class Formatter
         "characters" => emoji.characters,
         "name" => emoji.name,
         "keywords" => emoji.keywords,
+        "tts_descriptions" => emoji.tts_descriptions,
         "qualification" => emoji.qualification
       }
     end

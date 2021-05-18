@@ -12,7 +12,8 @@ RSpec.describe Formatter do
         subcategory: "face-smiling",
         name: "grinning face",
         qualification: "fully-qualified",
-        keywords: {"en" => ["smile", "grin"]}
+        keywords: {"en" => ["smile", "grin"]},
+        tts_descriptions: {"en" => "smiling person"}
       ),
       Emoji.new(
         characters: "✍",
@@ -37,6 +38,7 @@ RSpec.describe Formatter do
                   "characters" => "😀",
                   "name" => "grinning face",
                   "keywords" => {"en" => ["smile", "grin"]},
+                  "tts_descriptions" => {"en" => "smiling person"},
                   "qualification" => "fully-qualified"
                 }
               ]
@@ -53,6 +55,7 @@ RSpec.describe Formatter do
                   "characters" => "✍",
                   "name" => "writing hand",
                   "keywords" => {},
+                  "tts_descriptions" => {},
                   "qualification" => "unqualified"
                 }
               ]

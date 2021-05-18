@@ -14,7 +14,8 @@ RSpec.describe Emoji do
       category: nil,
       subcategory: nil,
       qualification: nil,
-      keywords: {}
+      keywords: {},
+      tts_descriptions: {}
     )
   end
 
@@ -25,7 +26,8 @@ RSpec.describe Emoji do
       category: "Category",
       subcategory: "Subcategory",
       qualification: "fully-qualified",
-      keywords: {"en" => ["smile", "grin"]}
+      keywords: {"en" => ["smile", "grin"]},
+      tts_descriptions: {"en" => "smiling person"}
     )
 
     expect(emoji).to have_attributes(
@@ -34,7 +36,8 @@ RSpec.describe Emoji do
       category: "Category",
       subcategory: "Subcategory",
       qualification: "fully-qualified",
-      keywords: {"en" => ["smile", "grin"]}
+      keywords: {"en" => ["smile", "grin"]},
+      tts_descriptions: {"en" => "smiling person"}
     )
   end
 
@@ -72,7 +75,7 @@ RSpec.describe Emoji do
       )
     end
 
-    it "merge keywords" do
+    it "merges keywords" do
       emoji_a = Emoji.new(
         characters: "A",
         keywords: {"en" => ["1", "2"]}
@@ -87,6 +90,25 @@ RSpec.describe Emoji do
       expect(emoji_a.keywords).to eq(
         "en" => ["1", "2", "3"],
         "sv" => ["10"]
+      )
+    end
+
+    it "merges tts_descriptions" do
+      emoji_a = Emoji.new(
+        characters: "A",
+        tts_descriptions: {"en" => "letter A", "la" => "littera A"}
+      )
+      emoji_b = Emoji.new(
+        characters: "B",
+        tts_descriptions: {"en" => "letter B", "sv" => "bokstaven B"}
+      )
+
+      emoji_a.merge!(emoji_b)
+
+      expect(emoji_a.tts_descriptions).to eq(
+        "en" => "letter B",
+        "la" => "littera A",
+        "sv" => "bokstaven B"
       )
     end
   end

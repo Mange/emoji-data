@@ -53,8 +53,10 @@ RSpec.describe AnnotationFile do
     end
   end
 
+  # This seems to be a marker in CLDR for "Needs a translation". As far as I
+  # can tell, it's never mixed with real words like this, but let's be careful
+  # anyway.
   it "skips keywords of just arrows" do
-    # Yes, a weird case but it's out there in the wild…
     sample_xml = <<~XML
       <?xml version="1.0" encoding="UTF-8" ?>
       <!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
@@ -80,59 +82,52 @@ RSpec.describe AnnotationFile do
     end
   end
 
-  context "with english language" do
-    it "uses TTS annotations as names" do
-      sample_xml = <<~XML
-        <?xml version="1.0" encoding="UTF-8" ?>
-        <!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
-        <ldml>
-          <identity>
-            <version number="$Revision$"/>
-            <language type="en"/>
-          </identity>
-          <annotations>
-            <annotation cp="😀" type="tts">grin</annotation>
-          </annotations>
-        </ldml>
-      XML
+  it "reads TTS annotations" do
+    sample_xml = <<~XML
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+      <ldml>
+        <identity>
+          <version number="$Revision$"/>
+          <language type="en"/>
+        </identity>
+        <annotations>
+          <annotation cp="😀" type="tts">grin</annotation>
+        </annotations>
+      </ldml>
+    XML
 
-      with_example_file(sample_xml) do |path|
-        annotation = AnnotationFile.new(path)
-        expect(annotation.each_annotation.first).to have_attributes(
-          class: Emoji,
-          characters: "😀",
-          name: "grin",
-          keywords: {}
-        )
-      end
+    with_example_file(sample_xml) do |path|
+      annotation = AnnotationFile.new(path)
+      expect(annotation.each_annotation.first).to have_attributes(
+        class: Emoji,
+        characters: "😀",
+        name: nil,
+        keywords: {},
+        tts_descriptions: {"en" => "grin"}
+      )
     end
   end
 
-  context "with non-english language" do
-    it "uses TTS annotations as keywords" do
-      sample_xml = <<~XML
-        <?xml version="1.0" encoding="UTF-8" ?>
-        <!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
-        <ldml>
-          <identity>
-            <version number="$Revision$"/>
-            <language type="sv"/>
-          </identity>
-          <annotations>
-            <annotation cp="😀" type="tts">leende</annotation>
-          </annotations>
-        </ldml>
-      XML
+  # This seems to be a marker in CLDR for "Needs a translation"
+  it "skips TTS annotations of just arrows" do
+    sample_xml = <<~XML
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+      <ldml>
+        <identity>
+          <version number="$Revision$"/>
+          <language type="en"/>
+        </identity>
+        <annotations>
+          <annotation cp="😀" type="tts">↑↑↑</annotation>
+        </annotations>
+      </ldml>
+    XML
 
-      with_example_file(sample_xml) do |path|
-        annotation = AnnotationFile.new(path)
-        expect(annotation.each_annotation.first).to have_attributes(
-          class: Emoji,
-          characters: "😀",
-          name: nil,
-          keywords: {"sv" => ["leende"]}
-        )
-      end
+    with_example_file(sample_xml) do |path|
+      annotation = AnnotationFile.new(path)
+      expect(annotation.each_annotation.count).to eq(0)
     end
   end
 end

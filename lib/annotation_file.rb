@@ -4,6 +4,10 @@ require "nokogiri"
 require "emoji"
 
 class AnnotationFile
+  # Seems to be a marker in CLDR that means "Value missing" or "Needs
+  # translation".
+  CLDR_DUMMY_VALUE = "↑↑↑"
+
   def initialize(filename)
     @document = File.open(filename) { |f| Nokogiri::XML(f) }
   end
@@ -16,18 +20,11 @@ class AnnotationFile
     return to_enum(:each_annotation) unless block_given?
 
     each_annotation_element do |element|
-      emoji = Emoji.new(characters: element["cp"])
-
-      if element["type"] == "tts" && language == "en"
-        emoji.name = element.text.strip
+      if element["type"] == "tts"
+        read_tts(element) { |emoji| yield emoji }
       else
-        keywords = element.text.split(" | ")
-        keywords.reject! { |word| word == "↑↑↑" }
-
-        emoji.keywords[language] = keywords unless keywords.empty?
+        read_keywords(element) { |emoji| yield emoji }
       end
-
-      yield emoji
     end
   end
 
@@ -37,6 +34,31 @@ class AnnotationFile
     selector = "./annotations/annotation"
     @document.root.xpath(selector).each do |element|
       yield element
+    end
+  end
+
+  def read_tts(element)
+    description = element.text.strip
+    if description != CLDR_DUMMY_VALUE
+      yield Emoji.new(
+        characters: element["cp"],
+        tts_descriptions: {language => description}
+      )
+    end
+  end
+
+  def read_keywords(element)
+    keywords = element
+      .text
+      .split("|")
+      .map(&:strip)
+      .reject { |word| word.empty? || word == CLDR_DUMMY_VALUE }
+
+    unless keywords.empty?
+      yield Emoji.new(
+        characters: element["cp"],
+        keywords: {language => keywords}
+      )
     end
   end
 end

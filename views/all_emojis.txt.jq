@@ -11,7 +11,7 @@
     . + (
       $sub.emojis | map(
         # emoji    category     subcategory    name     keyword | keyword | keyword
-        "\(.characters)\t\($cat)\t\($sub.name // "")\t\(.name // "")\t\(.keywords.en // [] | join(" | "))"
+        "\(.characters)\t\($cat)\t\($sub.name // "")\t\(.name // .tts_descriptions.en // "")\t\(.keywords.en // [] | join(" | "))"
       )
     )
   ) |
