@@ -47,3 +47,5 @@ gems:
 test: check-ruby gems
 	@echo Checking code style of Ruby files
 	@bundle exec standardrb --no-fix
+	@echo Running tests
+	@bundle exec rspec --warnings
