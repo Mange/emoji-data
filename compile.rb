@@ -11,7 +11,7 @@ compiler = Compiler.new
 
 $stderr.print "Loading CLDR emoji-test file…"
 compiler.add_test_file(
-  "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
+  "cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt"
 )
 warn " Done!"
 

@@ -8,6 +8,7 @@ RSpec.describe Formatter do
     emojis = [
       Emoji.new(
         characters: "😀",
+        version: "E1.0",
         category: "Smileys & Emotion",
         subcategory: "face-smiling",
         name: "grinning face",
@@ -17,6 +18,7 @@ RSpec.describe Formatter do
       ),
       Emoji.new(
         characters: "✍",
+        version: "E0.7",
         category: "People & Body",
         subcategory: "hand-prop",
         name: "writing hand",
@@ -36,6 +38,7 @@ RSpec.describe Formatter do
               "emojis" => [
                 {
                   "characters" => "😀",
+                  "version" => "E1.0",
                   "name" => "grinning face",
                   "keywords" => {"en" => ["smile", "grin"]},
                   "tts_descriptions" => {"en" => "smiling person"},
@@ -53,6 +56,7 @@ RSpec.describe Formatter do
               "emojis" => [
                 {
                   "characters" => "✍",
+                  "version" => "E0.7",
                   "name" => "writing hand",
                   "keywords" => {},
                   "tts_descriptions" => {},

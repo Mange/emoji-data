@@ -6,12 +6,12 @@ RSpec.describe "Integration", :slow do
   it "compiles English files correctly" do
     compiler = Compiler.new
     compiler.add_test_file(
-      "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
+      "cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt"
     )
     compiler.add_annotation_file("cldr/common/annotations/en.xml")
     compiler.guess_missing_categories
 
-    expect(compiler.emojis.size).to eq(4043)
+    expect(compiler.emojis.size).to eq(4590)
 
     joy = compiler.emojis["😂"]
     expect(joy).to have_attributes(
@@ -32,7 +32,7 @@ RSpec.describe "Integration", :slow do
 
     bearded_medium_light = compiler.emojis["🧔🏼"]
     expect(bearded_medium_light).to have_attributes(
-      name: "man: medium-light skin tone, beard",
+      name: "person: medium-light skin tone, beard",
       keywords: {},
       category: "People & Body",
       subcategory: "person",
@@ -52,7 +52,7 @@ RSpec.describe "Integration", :slow do
   it "compiles many language files correctly" do
     compiler = Compiler.new
     compiler.add_test_file(
-      "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
+      "cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt"
     )
     compiler.add_annotation_file("cldr/common/annotations/sv.xml")
     compiler.add_annotation_file("cldr/common/annotationsDerived/sv.xml")
@@ -60,7 +60,7 @@ RSpec.describe "Integration", :slow do
     compiler.add_annotation_file("cldr/common/annotationsDerived/en.xml")
     compiler.guess_missing_categories
 
-    expect(compiler.emojis.size).to eq(4043)
+    expect(compiler.emojis.size).to eq(4590)
 
     joy = compiler.emojis["😂"]
     expect(joy.keywords).to eq(
@@ -81,7 +81,7 @@ RSpec.describe "Integration", :slow do
   it "loads name, category and subcategory for everything" do
     compiler = Compiler.new
     compiler.add_test_file(
-      "cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt"
+      "cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt"
     )
     # Only load English annotations to keep this faster
     Dir[

@@ -4,7 +4,7 @@
 DATA_FILES := $(patsubst views/%.jq,data/%,$(wildcard views/*.jq)) data/all.json
 INPUT_FILES := $(wildcard cldr/common/annotations/*.xml) \
 	$(wildcard cldr/common/annotationsDerived/*.xml) \
-	cldr/tools/java/org/unicode/cldr/util/data/emoji/emoji-test.txt
+	cldr/tools/cldr-code/src/main/resources/org/unicode/cldr/util/data/emoji/emoji-test.txt
 
 all: cldr $(DATA_FILES)
 
