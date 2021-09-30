@@ -4,11 +4,11 @@ GEM
     ast (2.4.2)
     attr_extras (6.2.4)
     diff-lcs (1.4.4)
-    mini_portile2 (2.5.1)
-    nokogiri (1.11.4)
-      mini_portile2 (~> 2.5.0)
+    mini_portile2 (2.6.1)
+    nokogiri (1.12.5)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.11.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     optimist (3.0.1)
     parallel (1.20.1)
@@ -62,7 +62,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  nokogiri (~> 1.11)
+  nokogiri (~> 1.12)
   rspec (~> 3.10)
   standard (~> 1.1)
   super_diff (~> 0.7)
