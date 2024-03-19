@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "nokogiri", "~> 1.14"
+gem "nokogiri", "~> 1.15"
 
 group :development do
   gem "standard", "~> 1.1"
