@@ -19,8 +19,7 @@ GEM
     racc (1.7.3)
     rainbow (3.1.1)
     regexp_parser (2.2.0)
-    rexml (3.3.6)
-      strscan
+    rexml (3.3.9)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -52,7 +51,6 @@ GEM
     standard (1.7.0)
       rubocop (= 1.25.0)
       rubocop-performance (= 1.13.2)
-    strscan (3.1.0)
     super_diff (0.8.0)
       attr_extras (>= 6.2.4)
       diff-lcs
