@@ -1,4 +1,4 @@
 [submodule "cldr"]
 	path = cldr
 	url = https://github.com/unicode-org/cldr
-	branch = release-44-1
+	branch = release-46-1
